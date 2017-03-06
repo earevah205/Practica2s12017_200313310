@@ -7,6 +7,7 @@ package practica2cliente.rest;
 
 import practica2cliente.models.ColaResponse;
 import practica2cliente.models.ListaResponse;
+import practica2cliente.models.PilaResponse;
 import retrofit2.Call;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -33,5 +34,11 @@ public interface PythonApiService {
     
     @GET("/cola/dequeue")
     Call<ColaResponse> colaDequeue();
+    
+    @GET("/pila/push/{numero}")
+    Call<PilaResponse> pilaPush(@Path("numero") int numero);
+    
+    @GET("/pila/pop")
+    Call<PilaResponse> pilaPop();
     
 }

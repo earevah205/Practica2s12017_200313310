@@ -54,11 +54,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="push"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPushActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnPop">
       <Properties>
         <Property name="text" type="java.lang.String" value="pop"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPopActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtPila">
     </Component>

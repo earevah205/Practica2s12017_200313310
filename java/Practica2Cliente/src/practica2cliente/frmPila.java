@@ -5,12 +5,22 @@
  */
 package practica2cliente;
 
+import javax.swing.JOptionPane;
+import practica2cliente.models.ColaResponse;
+import practica2cliente.models.PilaResponse;
+import practica2cliente.rest.PythonApiClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  *
  * @author estuardoarevalo
  */
 public class frmPila extends javax.swing.JFrame {
 
+    PythonApiClient mPythonClient;
+    
     /**
      * Creates new form frmPila
      */
@@ -22,6 +32,8 @@ public class frmPila extends javax.swing.JFrame {
         //colocar en el centro de la pantalla
         this.setLocationRelativeTo(null);
         //----------------------------------------------------------------
+        
+        mPythonClient = new PythonApiClient();
     }
 
     /**
@@ -38,8 +50,18 @@ public class frmPila extends javax.swing.JFrame {
         txtPila = new javax.swing.JTextField();
 
         btnPush.setText("push");
+        btnPush.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPushActionPerformed(evt);
+            }
+        });
 
         btnPop.setText("pop");
+        btnPop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPopActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,6 +91,76 @@ public class frmPila extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnPushActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPushActionPerformed
+        mPythonClient.getService().pilaPush(Integer.parseInt(txtPila.getText())).enqueue(new Callback<PilaResponse>() {
+            @Override
+            public void onResponse(Call<PilaResponse> call, Response<PilaResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    PilaResponse pilaResponse = rspns.body();
+                    
+                    if (pilaResponse.success){
+                        JOptionPane.showMessageDialog(null, "Dato ingresado correctamente","Satisfactorio", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                        txtPila.setText("");
+                    }else{
+                        JOptionPane.showMessageDialog(null, pilaResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PilaResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        
+            
+        });
+    }//GEN-LAST:event_btnPushActionPerformed
+
+    private void btnPopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPopActionPerformed
+        mPythonClient.getService().pilaPop().enqueue(new Callback<PilaResponse>() {
+            @Override
+            public void onResponse(Call<PilaResponse> call, Response<PilaResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    PilaResponse pilaResponse = rspns.body();
+                    
+                    if (pilaResponse.success){
+                        
+                        if (pilaResponse.numero != 0)
+                        {
+                            JOptionPane.showMessageDialog(null, "Sale de la pila el dato " + pilaResponse.numero,"Satisfactorio", 
+                                JOptionPane.INFORMATION_MESSAGE);
+                        }else{
+                            JOptionPane.showMessageDialog(null, "La pila está vacía", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, pilaResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PilaResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            
+        });
+    }//GEN-LAST:event_btnPopActionPerformed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
