@@ -1,6 +1,4 @@
-
-# A very simple Flask Hello World app for you to get started with...
-
+import json
 from flask import Flask
 # from flask import request
 from ListaSimple import ListaSimple
@@ -17,22 +15,23 @@ def hello_world():
 @app.route('/lista/agregar/<dato>')
 def listaAgregar(dato):
     lista.agregarAlInicio(dato)
-    return 'Dato = ' + dato + ' agregado correctamente.'
+    return json.dumps({"success": True})
 
 
 @app.route('/lista/buscar/<dato>')
 def listaBuscar(dato):
     x = lista.buscar(dato)
-    if x >= 0:
-        return 'El dato ' + dato + ' se encontro en el indice = ' + str(x)
-    else:
-        return 'No se encontro el dato ' + dato
+    return json.dumps({"index": x, "success": True})
 
 
 @app.route('/lista/eliminar/<indice>')
 def listaEliminar(indice):
-    lista.eliminarPorIndice(indice)
-    return 'Se elimino correctamente el indice = ' + indice
+    index = int(indice)
+    resp = lista.eliminarPorIndice(index)
+    if resp:
+        return json.dumps({"success": True})
+    else:
+        return json.dumps({"error": "Indice " + indice + " no encontrado.", "success": False})
 
 
 app.run()

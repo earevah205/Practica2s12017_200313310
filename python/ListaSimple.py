@@ -37,11 +37,13 @@ class ListaSimple:
 
         # recorremos la lista
         x = 0
+        eliminado = False
         while temp is not None:
             # si el nodo contiene la palabra que estamos buscando
             # entonces lo eliminamos
             if x == indice:
 
+                eliminado = True
                 # es el inicio de la lista
                 if anterior is None:
                     self.__nodoInicio = temp.getSiguiente()
@@ -55,6 +57,7 @@ class ListaSimple:
                 anterior = temp
                 temp = temp.getSiguiente()
             x += 1
+        return eliminado
 
     def eliminar(self, dato):
 
@@ -65,11 +68,12 @@ class ListaSimple:
         anterior = None
 
         # recorremos la lista
+        eliminado = False
         while temp is not None:
             # si el nodo contiene la palabra que estamos buscando
             # entonces lo eliminamos
             if temp.getDato() == dato:
-
+                eliminado = True
                 # es el inicio de la lista
                 if anterior is None:
                     self.__nodoInicio = temp.getSiguiente()
@@ -82,6 +86,7 @@ class ListaSimple:
             else:
                 anterior = temp
                 temp = temp.getSiguiente()
+        return eliminado
 
     def buscar(self, dato):
 
