@@ -5,12 +5,22 @@
  */
 package practica2cliente;
 
+import javax.swing.JOptionPane;
+import practica2cliente.models.ColaResponse;
+import practica2cliente.models.ListaResponse;
+import practica2cliente.rest.PythonApiClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  *
  * @author estuardoarevalo
  */
 public class frmCola extends javax.swing.JFrame {
 
+    PythonApiClient mPythonClient;
+    
     /**
      * Creates new form frmCola
      */
@@ -22,6 +32,8 @@ public class frmCola extends javax.swing.JFrame {
         //colocar en el centro de la pantalla
         this.setLocationRelativeTo(null);
         //----------------------------------------------------------------
+        
+        mPythonClient = new PythonApiClient();
     }
 
     /**
@@ -37,11 +49,19 @@ public class frmCola extends javax.swing.JFrame {
         btnDequeue = new javax.swing.JButton();
         txtCola = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
         btnQueue.setText("queue");
+        btnQueue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQueueActionPerformed(evt);
+            }
+        });
 
         btnDequeue.setText("dequeue");
+        btnDequeue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDequeueActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,6 +91,78 @@ public class frmCola extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnQueueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQueueActionPerformed
+        
+        mPythonClient.getService().colaQueue(Integer.parseInt(txtCola.getText())).enqueue(new Callback<ColaResponse>() {
+            @Override
+            public void onResponse(Call<ColaResponse> call, Response<ColaResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    ColaResponse colaResponse = rspns.body();
+                    
+                    if (colaResponse.success){
+                        JOptionPane.showMessageDialog(null, "Dato ingresado correctamente","Satisfactorio", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                        txtCola.setText("");
+                    }else{
+                        JOptionPane.showMessageDialog(null, colaResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ColaResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
+            
+        });
+    }//GEN-LAST:event_btnQueueActionPerformed
+
+    private void btnDequeueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDequeueActionPerformed
+        
+        mPythonClient.getService().colaDequeue().enqueue(new Callback<ColaResponse>() {
+            @Override
+            public void onResponse(Call<ColaResponse> call, Response<ColaResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    ColaResponse colaResponse = rspns.body();
+                    
+                    if (colaResponse.success){
+                        
+                        if (colaResponse.numero != 0)
+                        {
+                            JOptionPane.showMessageDialog(null, "Sale de la cola el dato " + colaResponse.numero,"Satisfactorio", 
+                                JOptionPane.INFORMATION_MESSAGE);
+                        }else{
+                            JOptionPane.showMessageDialog(null, "La cola está vacía", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, colaResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ColaResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
+            
+        });
+        
+    }//GEN-LAST:event_btnDequeueActionPerformed
 
     
 

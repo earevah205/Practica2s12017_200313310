@@ -37,8 +37,6 @@ public class frmPila extends javax.swing.JFrame {
         btnPop = new javax.swing.JButton();
         txtPila = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
         btnPush.setText("push");
 
         btnPop.setText("pop");

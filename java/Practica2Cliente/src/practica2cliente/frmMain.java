@@ -215,15 +215,15 @@ public class frmMain extends javax.swing.JFrame  implements WindowListener   {
         }
         if (e.getSource() == mFrmMatriz) {
              this.setVisible(true);
-             mFrmLista.dispose();
+             mFrmMatriz.dispose();
         }
         if (e.getSource() == mFrmPila) {
              this.setVisible(true);
-             mFrmLista.dispose();
+             mFrmPila.dispose();
         }
         if (e.getSource() == mFrmCola) {
              this.setVisible(true);
-             mFrmLista.dispose();
+             mFrmCola.dispose();
         }
         
         

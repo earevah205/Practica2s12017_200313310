@@ -42,8 +42,6 @@ public class frmMatriz extends javax.swing.JFrame {
         txtBuscarLetra = new javax.swing.JTextField();
         btnBuscarLetra = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
         btnAgregar.setText("Agregar");
 
         btnBorrar.setText("Borrar");

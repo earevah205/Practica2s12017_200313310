@@ -52,8 +52,6 @@ public class frmLista extends javax.swing.JFrame {
         btnBorrar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
         btnAgregar.setText("Agregar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,7 +146,7 @@ public class frmLista extends javax.swing.JFrame {
 
             @Override
             public void onFailure(Call<ListaResponse> call, Throwable thrwbl) {
-                JOptionPane.showMessageDialog(null, "Error en Llama a python", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         
@@ -182,7 +180,7 @@ public class frmLista extends javax.swing.JFrame {
 
             @Override
             public void onFailure(Call<ListaResponse> call, Throwable thrwbl) {
-                JOptionPane.showMessageDialog(null, "Error en Llama a python", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }//GEN-LAST:event_btnBorrarActionPerformed
@@ -220,7 +218,7 @@ public class frmLista extends javax.swing.JFrame {
 
             @Override
             public void onFailure(Call<ListaResponse> call, Throwable thrwbl) {
-                JOptionPane.showMessageDialog(null, "Error en Llama a python", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         

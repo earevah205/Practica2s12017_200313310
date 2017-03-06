@@ -5,6 +5,7 @@
  */
 package practica2cliente.rest;
 
+import practica2cliente.models.ColaResponse;
 import practica2cliente.models.ListaResponse;
 import retrofit2.Call;
 import retrofit2.http.FormUrlEncoded;
@@ -26,4 +27,11 @@ public interface PythonApiService {
     
     @GET("/lista/buscar/{dato}")
     Call<ListaResponse> listaBuscar(@Path("dato") String dato);
+    
+    @GET("/cola/queue/{numero}")
+    Call<ColaResponse> colaQueue(@Path("numero") int numero);
+    
+    @GET("/cola/dequeue")
+    Call<ColaResponse> colaDequeue();
+    
 }
