@@ -27,6 +27,35 @@ class ListaSimple:
             self.__nodoFin = nuevo
         return nuevo
 
+    def eliminarPorIndice(self, indice):
+
+        if self.__nodoInicio is None:
+            return None
+
+        temp = self.__nodoInicio
+        anterior = None
+
+        # recorremos la lista
+        x = 0
+        while temp is not None:
+            # si el nodo contiene la palabra que estamos buscando
+            # entonces lo eliminamos
+            if x == indice:
+
+                # es el inicio de la lista
+                if anterior is None:
+                    self.__nodoInicio = temp.getSiguiente()
+                else:
+                    anterior.setSiguiente(temp.getSiguiente())
+
+                # para que salga del ciclo
+                temp = None
+
+            else:
+                anterior = temp
+                temp = temp.getSiguiente()
+            x += 1
+
     def eliminar(self, dato):
 
         if self.__nodoInicio is None:
@@ -87,41 +116,22 @@ class ListaSimple:
     def getFinal(self):
         return self.__nodoFin
 
+    def getGraphvizData(self):
+        nodo = self.__nodoInicio
+        graphvizData = ""
+        x = 1
+        while nodo is not None:
+            if nodo.getSiguiente() is not None:
+                s = "{" + nodo.getDato() + x
+                s += " [label=\"" + nodo.getDato() + "\"] }"
+                s += " -> {" + nodo.getSiguiente().getDato() + (x+1)
+                s += " [label=\"" + nodo.getSiguiente().getDato() + "\"] }"
+                graphvizData += s
+            else:
+                s = "{" + nodo.getDato() + x
+                s += " [label=\"" + nodo.getPalabra().get() + "\"] }"
+                graphvizData += s
+            x += 1
+            nodo = nodo.getSiguiente()
 
-'''
-    public String crearImagenGraphviz(){
-
-
-        GraphViz gv = new GraphViz();
-        gv.addln(gv.start_graph());
-
-
-        NodoDiccionario nodo = nodoInicio;
-        int x = 1;
-        while(nodo!=null){
-            if (nodo.getSiguiente()!=null){
-                String s = "{" + nodo.getPalabra().get().toLowerCase() + x + " [label=\"" + nodo.getPalabra().get() + "\"] }";
-                s += " -> {" + nodo.getSiguiente().getPalabra().get().toLowerCase() + (x+1) + " [label=\"" + nodo.getSiguiente().getPalabra().get() + "\"] }";
-                gv.addln(s);
-            }else{
-                String s = "{" + nodo.getPalabra().get().toLowerCase() + x + " [label=\"" + nodo.getPalabra().get() + "\"] }";
-                gv.addln(s);
-            }
-            x++;
-            nodo = nodo.getSiguiente();
-        }
-
-        gv.addln(gv.end_graph());
-
-        System.out.println(gv.getDotSource());
-        gv.decreaseDpi();   // 106 dpi
-        String type = "gif";
-        String repesentationType= "dot";
-        String imagePath = gv.getTempDir() + "/diccionario"+frmScrabbleGame.now()+gv.getImageDpi()+"."+ type;
-	File out = new File( imagePath );
-	gv.writeGraphToFile( gv.getGraph(gv.getDotSource(), type, repesentationType), out );
-
-        return imagePath;
-
-    }
-'''
+        return graphvizData
