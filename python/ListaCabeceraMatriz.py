@@ -46,7 +46,7 @@ class ListaCabeceraMatriz:
 
         nodo = self.__nodoInicio
         while nodo is not None:
-            if nodo.getdominio() == dominio:
+            if nodo.getDominio() == dominio:
                 return nodo
             nodo = nodo.getDerecha()
         return None

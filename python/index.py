@@ -4,11 +4,13 @@ from flask import Flask
 from ListaSimple import ListaSimple
 from Cola import Cola
 from Pila import Pila
+from Matriz import Matriz
 
 app = Flask(__name__)
 mLista = ListaSimple()
 mCola = Cola()
 mPila = Pila()
+mMatriz = Matriz()
 
 
 @app.route('/')
@@ -71,6 +73,31 @@ def pilaPush(dato):
 def pilaPop():
     x = mPila.pop()
     return json.dumps({"numero": x, "success": True})
+
+
+@app.route('/matriz/agregar/<dato>')
+def matrizAgregar(dato):
+    dato = dato.strip()
+    letra = list(dato)[0]
+    dominio = dato.split("@")[1]
+    username = dato.split("@")[0]
+    mMatriz.insertar(dominio, letra, username)
+    return json.dumps({"success": True})
+
+
+@app.route('/matriz/buscarLetra/<letra>')
+def matrizBuscarLetra(letra):
+    letra = letra.strip()
+    # mMatriz.insertar(dominio, letra, username)
+    return json.dumps({"success": True})
+
+
+@app.route('/matriz/buscarDominio/<dominio>')
+def matrizBuscarDominio(dominio):
+    dominio = dominio.strip()
+    # mMatriz.insertar(dominio, letra, username)
+    lista = Matriz.bucarCabecera(dominio)
+    return json.dumps({"success": True, "lista": lista})
 
 
 app.run()
