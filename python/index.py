@@ -103,6 +103,20 @@ def matrizAgregar(dato):
     return json.dumps({"success": True})
 
 
+@app.route('/matriz/eliminar/<dato>')
+def matrizEliminar(dato):
+    dato = dato.strip()
+    letra = list(dato)[0]
+    dominio = dato.split("@")[1]
+    username = dato.split("@")[0]
+    message = mMatriz.eliminar(dominio, letra, username)
+
+    if message == "":
+        return json.dumps({"success": True})
+    else:
+        return json.dumps({"success": False, "error": message})
+
+
 @app.route('/matriz/buscarLetra/<letra>')
 def matrizBuscarLetra(letra):
     letra = letra.strip()

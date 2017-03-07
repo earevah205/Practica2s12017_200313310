@@ -11,6 +11,81 @@ class Matriz:
     def getListaCabecera(self):
         return self.__listaCabecera
 
+    def eliminar(self, dominio, letra, correo):
+        mensaje = ""
+        cabecera = self.__listaCabecera.buscar(dominio)
+        if cabecera is None:
+            mensaje = "No existe el Dominio " + dominio
+            print(mensaje)
+            return mensaje
+
+        lateral = self.__listaLateral.buscar(letra)
+        if lateral is None:
+            mensaje = "No existe ningun correo con inicial " + letra
+            print(mensaje)
+            return mensaje
+
+        nodo = self.obtenerNodo(dominio, letra)
+        nodoProfundidad = nodo.buscar(correo)
+        if nodoProfundidad is None:
+            mensaje = "No existe el correo " + correo + "@" + dominio
+            print(mensaje)
+            return mensaje
+
+        # ya que lo encontramos procedemos a eliminarlo de la matriz
+        if nodoProfundidad != nodo.getProfundidadInicio():
+            # simplemente remover el nodoProfundidad
+            if nodoProfundidad.getAbajo() is not None:
+                nodoProfundidad.getArriba().setAbajo(
+                    nodoProfundidad.getAbajo()
+                )
+                nodoProfundidad.getAbajo().setArriba(
+                    nodoProfundidad.getArriba()
+                )
+            else:
+                nodoProfundidad.getArriba().setAbajo(None)
+                nodo.setProfundidadFin(nodoProfundidad.getArriba())
+        else:
+
+            if nodoProfundidad.getAbajo() is not None:
+                nodo.setProfundidadInicio(nodoProfundidad.getAbajo())
+            else:
+                # tenemos que remover el nodo y luego revisar si tenemos que
+                # eliminar la cabecera y el lateral
+
+                # operaciones con la cabecera
+                if (nodo.getCabecera().getInicioMatriz() != nodo):
+                    if nodo.getAbajo() is not None:
+                        nodo.getArriba().setAbajo(nodo.getAbajo())
+                        nodo.getAbajo().setArriba(nodo.getArriba())
+                    else:
+                        nodo.getArriba().setAbajo(None)
+                        nodo.getCabecera().setFinMatriz(nodo.getArriba())
+                else:
+                    if nodo.getAbajo() is not None:
+                        nodo.getCabecera().setInicioMatriz(nodo.getAbajo())
+                        nodo.getAbajo().setArriba(None)
+                    else:
+                        # remover cabecera
+                        self.__listaCabecera.eliminar(dominio)
+
+                # operaciones con el lateral
+                if (nodo.getLateral().getInicioMatriz() != nodo):
+                    if nodo.getDerecha() is not None:
+                        nodo.getIzquierda().setDerecha(nodo.getDerecha())
+                        nodo.getDerecha().setIzquierda(nodo.getIzquierda())
+                    else:
+                        nodo.getIzquierda().setDerecha(None)
+                        nodo.getLateral().setFinMatriz(nodo.getIzquierda())
+                else:
+                    if nodo.getDerecha() is not None:
+                        nodo.getLateral().setInicioMatriz(nodo.getDerecha())
+                        nodo.getDerecha().setIzquierda(None)
+                    else:
+                        # remover lateral
+                        self.__listaLateral.eliminar(letra)
+        return ""
+
     def insertar(self, dominio, letra, correo):
         cabecera = self.__listaCabecera.buscar(dominio)
         if cabecera is None:

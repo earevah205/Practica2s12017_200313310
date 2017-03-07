@@ -51,6 +51,45 @@ class ListaCabeceraMatriz:
             nodo = nodo.getDerecha()
         return None
 
+    def eliminar(self, dominio):
+
+        if self.__nodoInicio is None:
+            return None
+
+        temp = self.__nodoInicio
+        anterior = None
+
+        # recorremos la lista
+        eliminado = False
+        while temp is not None:
+            # si el nodo contiene la palabra que estamos buscando
+            # entonces lo eliminamos
+            if temp.getDominio() == dominio:
+                eliminado = True
+                # es el inicio de la lista
+                if anterior is None:
+                    if temp.getDerecha() is None:
+                        self.__nodoFin = None
+                        self.__nodoInicio = None
+                    else:
+                        temp.getDerecha().setIzquierda(None)
+                        self.__nodoInicio = temp.getDerecha()
+                else:
+                    if temp.getDerecha() is None:
+                        self.__nodoFin = anterior
+                        anterior.setDerecha(None)
+                    else:
+                        temp.getDerecha().setIzquierda(anterior)
+                        anterior.setDerecha(temp.getDerecha())
+
+                # para que salga del ciclo
+                temp = None
+
+            else:
+                anterior = temp
+                temp = temp.getDerecha()
+        return eliminado
+
     def getNodoInicio(self):
         return self.__nodoInicio
 

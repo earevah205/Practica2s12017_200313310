@@ -52,7 +52,7 @@ public interface PythonApiService {
     @GET("/matriz/agregar/{correo}")
     Call<MatrizResponse> matrizAgregar(@Path("correo") String correo);
     
-    @GET("/matriz/borrar/{correo}")
+    @GET("/matriz/eliminar/{correo}")
     Call<MatrizResponse> matrizBorrar(@Path("correo") String correo);
     
     @GET("/matriz/buscarDominio/{dominio}")

@@ -118,6 +118,7 @@ public class frmPila extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Dato ingresado correctamente","Satisfactorio", 
                             JOptionPane.INFORMATION_MESSAGE);
                         txtPila.setText("");
+                        txtPila.requestFocus();
                     }else{
                         JOptionPane.showMessageDialog(null, pilaResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
                     }

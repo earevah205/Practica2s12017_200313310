@@ -119,6 +119,7 @@ public class frmCola extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Dato ingresado correctamente","Satisfactorio", 
                             JOptionPane.INFORMATION_MESSAGE);
                         txtCola.setText("");
+                        txtCola.requestFocus();
                     }else{
                         JOptionPane.showMessageDialog(null, colaResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
                     }

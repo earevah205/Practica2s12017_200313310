@@ -43,6 +43,45 @@ class ListaLateralMatriz:
                 self.insertarAlMedio(nuevo)
         return nuevo
 
+    def eliminar(self, letra):
+
+        if self.__nodoInicio is None:
+            return None
+
+        temp = self.__nodoInicio
+        anterior = None
+
+        # recorremos la lista
+        eliminado = False
+        while temp is not None:
+            # si el nodo contiene la palabra que estamos buscando
+            # entonces lo eliminamos
+            if temp.getLetra() == letra:
+                eliminado = True
+                # es el inicio de la lista
+                if anterior is None:
+                    if temp.getAbajo() is None:
+                        self.__nodoFin = None
+                        self.__nodoInicio = None
+                    else:
+                        temp.getAbajo().setArriba(None)
+                        self.__nodoInicio = temp.getAbajo()
+                else:
+                    if temp.getAbajo() is None:
+                        self.__nodoFin = anterior
+                        anterior.setAbajo(None)
+                    else:
+                        temp.getAbajo().setArriba(anterior)
+                        anterior.setAbajo(temp.getAbajo())
+
+                # para que salga del ciclo
+                temp = None
+
+            else:
+                anterior = temp
+                temp = temp.getAbajo()
+        return eliminado
+
     def buscar(self, letra):
         nodo = self.__nodoInicio
         while nodo is not None:

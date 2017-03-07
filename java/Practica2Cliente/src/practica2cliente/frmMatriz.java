@@ -210,6 +210,7 @@ public class frmMatriz extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Dato ingresado correctamente","Satisfactorio", 
                             JOptionPane.INFORMATION_MESSAGE);
                         txtAgregar.setText("");
+                        txtAgregar.requestFocus();
                     }else{
                         JOptionPane.showMessageDialog(null, matrizResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -247,6 +248,7 @@ public class frmMatriz extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Dato Eliminado correctamente","Satisfactorio", 
                             JOptionPane.INFORMATION_MESSAGE);
                         txtBorrar.setText("");
+                        txtBorrar.requestFocus();
                     }else{
                         JOptionPane.showMessageDialog(null, matrizResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
                     }

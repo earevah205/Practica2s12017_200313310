@@ -150,6 +150,7 @@ public class frmLista extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Dato ingresado correctamente","Satisfactorio", 
                             JOptionPane.INFORMATION_MESSAGE);
                         txtAgregar.setText("");
+                        txtAgregar.requestFocus();
                     }else{
                         JOptionPane.showMessageDialog(null, listaResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -183,7 +184,8 @@ public class frmLista extends javax.swing.JFrame {
                     if (listaResponse.success){
                         JOptionPane.showMessageDialog(null, "Dato Eliminado correctamente","Satisfactorio", 
                             JOptionPane.INFORMATION_MESSAGE);
-                        txtAgregar.setText("");
+                        txtBorrar.setText("");
+                        txtBorrar.requestFocus();
                     }else{
                         JOptionPane.showMessageDialog(null, listaResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -218,7 +220,8 @@ public class frmLista extends javax.swing.JFrame {
                         
                             JOptionPane.showMessageDialog(null, "Se encontró el dato en el indice = " + listaResponse.index ,"Satisfactorio", 
                                 JOptionPane.INFORMATION_MESSAGE);
-                            txtAgregar.setText("");
+                            
+                            
                         }else{
                             JOptionPane.showMessageDialog(null, "No se encontró el dato", "Error", JOptionPane.ERROR_MESSAGE);
                         }
