@@ -1,3 +1,6 @@
+from NodoMatrizProfundidad import NodoMatrizProfundidad
+
+
 class NodoMatriz:
     def __init__(self):
         self.__arriba = None
@@ -6,7 +9,8 @@ class NodoMatriz:
         self.__derecha = None
         self.__cabecera = None
         self.__lateral = None
-        self.__correo = None
+        self.__profundidadInicio = None
+        self.__profundidadFin = None
         self.__letra = None
         self.__dominio = None
 
@@ -46,12 +50,6 @@ class NodoMatriz:
     def setDominio(self, dominio):
         self.__dominio = dominio
 
-    def getCorreo(self):
-        return self.__correo
-
-    def setCorreo(self, correo):
-        self.__correo = correo
-
     def getCabecera(self):
         return self.__cabecera
 
@@ -63,3 +61,39 @@ class NodoMatriz:
 
     def setLateral(self, lateral):
         self.__lateral = lateral
+
+    def getProfundidadInicio(self):
+        return self.__profundidadInicio
+
+    def setProfundidadInicio(self, profundidadInicio):
+        self.__profundidadInicio = profundidadInicio
+
+    def getProfundidadFin(self):
+        return self.__profundidadFin
+
+    def setProfundidadFin(self, profundidadFin):
+        self.__profundidadFin = profundidadFin
+
+    def insertar(self, letra, dominio, correo):
+        nuevo = NodoMatrizProfundidad()
+        nuevo.setLetra(letra)
+        nuevo.setDominio(dominio)
+        nuevo.setCorreo(correo)
+
+        if self.__profundidadInicio is None:
+            self.__profundidadInicio = self.__profundidadFin = nuevo
+        else:
+            # insertar al final
+            self.__profundidadFin.setAbajo(nuevo)
+            nuevo.setArriba(self.__profundidadFin)
+            self.__profundidadFin = nuevo
+
+        return nuevo
+
+    def buscar(self, correo):
+        nodo = self.__profundidadInicio
+        while nodo is not None:
+            if nodo.getCorreo() == correo:
+                return nodo
+            nodo = nodo.getAbajo()
+        return None

@@ -24,14 +24,14 @@ class NodoCabeceraMatriz:
     def setDominio(self, dominio):
         self.__dominio = dominio
 
-    def getNodoInicioMatriz(self):
+    def getInicioMatriz(self):
         return self.__nodoInicioMatriz
 
-    def setNodoInicioMatriz(self, nodoInicioMatriz):
+    def setInicioMatriz(self, nodoInicioMatriz):
         self.__nodoInicioMatriz = nodoInicioMatriz
 
-    def getNodoFinMatriz(self):
+    def getFinMatriz(self):
         return self.__nodoFinMatriz
 
-    def setNodoFinMatriz(self, nodoFinMatriz):
+    def setFinMatriz(self, nodoFinMatriz):
         self.__nodoFinMatriz = nodoFinMatriz

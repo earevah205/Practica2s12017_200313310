@@ -5,12 +5,26 @@
  */
 package practica2cliente;
 
+import java.io.File;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import practica2cliente.models.ListaResponse;
+import practica2cliente.models.MatrizResponse;
+import practica2cliente.rest.PythonApiClient;
+import practica2cliente.utils.GraphViz;
+import practica2cliente.utils.ValidatorUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  *
  * @author estuardoarevalo
  */
 public class frmMatriz extends javax.swing.JFrame {
 
+    PythonApiClient mPythonClient;
+    
     /**
      * Creates new form frmMatriz
      */
@@ -22,6 +36,8 @@ public class frmMatriz extends javax.swing.JFrame {
         //colocar en el centro de la pantalla
         this.setLocationRelativeTo(null);
         //----------------------------------------------------------------
+        
+        mPythonClient = new PythonApiClient();
     }
 
     /**
@@ -41,17 +57,40 @@ public class frmMatriz extends javax.swing.JFrame {
         txtAgregar = new javax.swing.JTextField();
         txtBuscarLetra = new javax.swing.JTextField();
         btnBuscarLetra = new javax.swing.JButton();
+        btnGraphviz = new javax.swing.JButton();
 
         btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
 
         btnBuscarDominio.setText("Buscar dominio");
+        btnBuscarDominio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarDominioActionPerformed(evt);
+            }
+        });
 
         btnBuscarLetra.setText("Buscar letra");
         btnBuscarLetra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarLetraActionPerformed(evt);
+            }
+        });
+
+        btnGraphviz.setText("graphviz");
+        btnGraphviz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGraphvizActionPerformed(evt);
             }
         });
 
@@ -64,23 +103,26 @@ public class frmMatriz extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtBuscarDominio, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtBuscarLetra, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtBuscarDominio, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBuscarLetra, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(67, 67, 67)
+                                .addComponent(btnBuscarLetra))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(btnBuscarDominio))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(109, 109, 109)
                         .addComponent(btnAgregar))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(115, 115, 115)
-                        .addComponent(btnBorrar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(btnBuscarLetra))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(btnBuscarDominio)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                        .addComponent(btnBorrar)))
+                .addContainerGap(54, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnGraphviz))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,7 +135,7 @@ public class frmMatriz extends javax.swing.JFrame {
                 .addComponent(txtBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBorrar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(txtBuscarLetra, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBuscarLetra)
@@ -101,23 +143,242 @@ public class frmMatriz extends javax.swing.JFrame {
                 .addComponent(txtBuscarDominio, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBuscarDominio)
-                .addGap(13, 13, 13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGraphviz))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarLetraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarLetraActionPerformed
-        // TODO add your handling code here:
+        
+        if (!ValidatorUtil.validateLetter(txtBuscarLetra.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese una letra válida", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        mPythonClient.getService().matrizBuscarLetra(txtBuscarLetra.getText()).enqueue(new Callback<MatrizResponse>() {
+            @Override
+            public void onResponse(Call<MatrizResponse> call, Response<MatrizResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    MatrizResponse matrizResponse = rspns.body();
+                    
+                    if (matrizResponse.success){
+                        
+                        if (matrizResponse.lista!=null && matrizResponse.lista.length > 0){
+                            String correos = String.join(",", matrizResponse.lista);
+                            JOptionPane.showMessageDialog(null, correos,"Satisfactorio", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                        }else{
+                            JOptionPane.showMessageDialog(null, "No hay resultados", "Error", JOptionPane.ERROR_MESSAGE);
+                        }                        
+                        
+                    }else{
+                        JOptionPane.showMessageDialog(null, matrizResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MatrizResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        });
     }//GEN-LAST:event_btnBuscarLetraActionPerformed
 
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        
+        if (!ValidatorUtil.validateEmail(txtAgregar.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese un email válido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        mPythonClient.getService().matrizAgregar(txtAgregar.getText()).enqueue(new Callback<MatrizResponse>() {
+            @Override
+            public void onResponse(Call<MatrizResponse> call, Response<MatrizResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    MatrizResponse matrizResponse = rspns.body();
+                    
+                    if (matrizResponse.success){
+                        JOptionPane.showMessageDialog(null, "Dato ingresado correctamente","Satisfactorio", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                        txtAgregar.setText("");
+                    }else{
+                        JOptionPane.showMessageDialog(null, matrizResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MatrizResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        });
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        
+        if (!ValidatorUtil.validateEmail(txtBorrar.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese un email válido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        mPythonClient.getService().matrizBorrar(txtBorrar.getText()).enqueue(new Callback<MatrizResponse>() {
+            @Override
+            public void onResponse(Call<MatrizResponse> call, Response<MatrizResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    MatrizResponse matrizResponse = rspns.body();
+                    
+                    if (matrizResponse.success){
+                        JOptionPane.showMessageDialog(null, "Dato Eliminado correctamente","Satisfactorio", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                        txtBorrar.setText("");
+                    }else{
+                        JOptionPane.showMessageDialog(null, matrizResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MatrizResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        });
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnBuscarDominioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDominioActionPerformed
+       
+        if (!ValidatorUtil.validateDomain(txtBuscarDominio.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese un dominio válido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        mPythonClient.getService().matrizBuscarDominio(txtBuscarDominio.getText()).enqueue(new Callback<MatrizResponse>() {
+            @Override
+            public void onResponse(Call<MatrizResponse> call, Response<MatrizResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    MatrizResponse matrizResponse = rspns.body();
+                    
+                    if (matrizResponse.success){
+                        
+                        if (matrizResponse.lista!=null && matrizResponse.lista.length > 0){
+                            String correos = String.join(",", matrizResponse.lista);
+                            JOptionPane.showMessageDialog(null, correos,"Satisfactorio", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                        }else{
+                            JOptionPane.showMessageDialog(null, "No hay resultados", "Error", JOptionPane.ERROR_MESSAGE);
+                        }                        
+                        
+                    }else{
+                        JOptionPane.showMessageDialog(null, matrizResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MatrizResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        });
+    }//GEN-LAST:event_btnBuscarDominioActionPerformed
+
+    private void btnGraphvizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraphvizActionPerformed
+
+        mPythonClient.getService().matrizGraphviz().enqueue(new Callback<MatrizResponse>() {
+            @Override
+            public void onResponse(Call<MatrizResponse> call, Response<MatrizResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    MatrizResponse matrizResponse = rspns.body();
+                    
+                    if (matrizResponse.success){
+                        
+                        GraphViz gv = new GraphViz();
+                        gv.addln(gv.start_graph());
+
+                        gv.add(matrizResponse.graphviz);
+
+                        gv.addln(gv.end_graph());
+
+                        System.out.println(gv.getDotSource());
+                        gv.decreaseDpi();   // 106 dpi
+                        String type = "gif";
+                        String repesentationType= "dot";
+                        String imagePath = gv.getTempDir() + "/lista"+GraphViz.now()+gv.getImageDpi()+"."+ type;
+                        File out = new File( imagePath );
+                        gv.writeGraphToFile( gv.getGraph(gv.getDotSource(), type, repesentationType), out );
+
+                        //creamos el objeto graphviz
+                        //String imagePath = colaDeFichas.crearImagenGraphviz();
+                        System.out.println(imagePath);
+                        mostrarPanelGraphviz(imagePath);                      
+                        
+                    }else{
+                        JOptionPane.showMessageDialog(null, matrizResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MatrizResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        });
+        
+    }//GEN-LAST:event_btnGraphvizActionPerformed
+
    
+    private void mostrarPanelGraphviz(String imagePath){
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frmGraph it = new frmGraph(imagePath);
+        frame.add(it);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBuscarDominio;
     private javax.swing.JButton btnBuscarLetra;
+    private javax.swing.JButton btnGraphviz;
     private javax.swing.JTextField txtAgregar;
     private javax.swing.JTextField txtBorrar;
     private javax.swing.JTextField txtBuscarDominio;

@@ -49,14 +49,14 @@ class Cola:
         x = 1
         while nodo is not None:
             if nodo.getSiguiente() is not None:
-                s = "{" + str(nodo.getNumero()) + str(x)
+                s = "{N" + str(nodo.getNumero()) + str(x)
                 s += " [label=\"" + str(nodo.getNumero()) + "\"] }"
-                s += " -> {" + str(nodo.getSiguiente().getNumero()) + str(x+1)
+                s += " -> {N" + str(nodo.getSiguiente().getNumero()) + str(x+1)
                 s += " [label=\"" + str(nodo.getSiguiente().getNumero())
                 s += "\"] }"
                 graphvizData += s
             else:
-                s = "{" + str(nodo.getNumero()) + str(x)
+                s = "{N" + str(nodo.getNumero()) + str(x)
                 s += " [label=\"" + str(nodo.getNumero()) + "\"] }"
                 graphvizData += s
             x += 1

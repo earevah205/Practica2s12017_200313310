@@ -22,4 +22,8 @@ public class ListaResponse {
     
     @SerializedName("index")
     public int index;
+    
+    @SerializedName("graphviz")
+    public String graphviz;
+    
 }

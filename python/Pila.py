@@ -54,14 +54,14 @@ class Pila:
         x = 1
         while nodo is not None:
             if nodo.getSiguiente() is not None:
-                s = "{" + nodo.getNumero() + x
-                s += " [label=\"" + nodo.getNumero() + "\"] }"
-                s += " -> {" + nodo.getSiguiente().getNumero() + (x+1)
-                s += " [label=\"" + nodo.getSiguiente().getNumero() + "\"] }"
+                s = "{N" + str(nodo.getNumero()) + str(x)
+                s += " [label=\"" + str(nodo.getNumero()) + "\"] }"
+                s += " -> {N" + str(nodo.getSiguiente().getNumero()) + str(x+1)
+                s += " [label=\"" + str(nodo.getSiguiente().getNumero()) + "\"] }"
                 graphvizData += s
             else:
-                s = "{" + nodo.getNumero() + x
-                s += " [label=\"" + nodo.getPalabra().get() + "\"] }"
+                s = "{N" + str(nodo.getNumero()) + str(x)
+                s += " [label=\"" + str(nodo.getNumero()) + "\"] }"
                 graphvizData += s
             x += 1
             nodo = nodo.getSiguiente()

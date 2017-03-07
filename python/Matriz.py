@@ -12,51 +12,73 @@ class Matriz:
         return self.__listaCabecera
 
     def insertar(self, dominio, letra, correo):
-        nuevo = NodoMatriz()
-        nuevo.setCorreo(correo)
-
         cabecera = self.__listaCabecera.buscar(dominio)
         if cabecera is None:
+            print("---creando cabecera " + dominio)
             cabecera = self.__listaCabecera.insertar(dominio)
-        nuevo.setCabecera(cabecera)
+        print("usando cabecera " + dominio)
 
         lateral = self.__listaLateral.buscar(letra)
         if lateral is None:
+            print("---creando lateral " + letra)
             lateral = self.__listaLateral.insertar(letra)
-        nuevo.setLateral(lateral)
+        print("usando lateral " + letra)
 
-        # si la cabecera aun no tiene el inicio del Matriz
-        # es porque esta vacio
-        if cabecera.getNodoInicioMatriz() is None:
-            cabecera.setNodoInicioMatriz(nuevo)
-            cabecera.setNodoFinMatriz(nuevo)
-        else:
-            if letra < cabecera.getNodoInicioMatriz().getLateral().getLetra():
-                self.insertarAlInicioY(cabecera.getNodoInicioMatriz(), nuevo)
-                cabecera.setNodoInicioMatriz(nuevo)
-            elif letra > cabecera.getNodoFinMatriz().getLateral().getLetra():
-                self.insertarAlFinalY(cabecera.getNodoFinMatriz(), nuevo)
-                cabecera.setNodoFinMatriz(nuevo)
-            else:
-                self.insertarAlMedioY(cabecera.getNodoInicioMatriz(), nuevo)
+        # buscamos si ya existe el primer nodo con la letra
+        nodo = self.obtenerNodo(dominio, letra)
 
-        # si la cabecera aun no tiene el inicio del Matriz
-        # es porque esta vacio
-        if lateral.getNodoInicioMatriz() is None:
-            lateral.setNodoInicioMatriz(nuevo)
-            lateral.setNodoFinMatriz(nuevo)
+        if nodo is not None:
+            nodo.insertar(letra, dominio, correo)
+            return nodo
         else:
-            iDominio = lateral.getNodoInicioMatriz().getCabecera().getDominio()
-            fDominio = lateral.getNodoFinMatriz().getCabecera().getDominio()
-            if (dominio < iDominio):
-                self.insertarAlInicioX(lateral.getNodoInicioMatriz(), nuevo)
-                lateral.setNodoInicioMatriz(nuevo)
-            elif (dominio > fDominio):
-                self.insertarAlFinalX(lateral.getNodoFinMatriz(), nuevo)
-                lateral.setNodoFinMatriz(nuevo)
+            nuevo = NodoMatriz()
+            nuevo.setLetra(letra)
+            nuevo.setDominio(dominio)
+            nuevo.setCabecera(cabecera)
+            nuevo.setLateral(lateral)
+            nuevo.insertar(letra, dominio, correo)
+
+            # si la cabecera aun no tiene el inicio del Matriz
+            # es porque esta vacio
+            if cabecera.getInicioMatriz() is None:
+                print("---lista cabecera vacia, creando nodo inicio y fin")
+                cabecera.setInicioMatriz(nuevo)
+                cabecera.setFinMatriz(nuevo)
             else:
-                self.insertarAlMedioX(lateral.getNodoInicioMatriz(), nuevo)
-        return nuevo
+                if letra < cabecera.getInicioMatriz().getLateral().getLetra():
+                    print("insertarAlInicioY")
+                    self.insertarAlInicioY(cabecera.getInicioMatriz(), nuevo)
+                    cabecera.setInicioMatriz(nuevo)
+                elif letra > cabecera.getFinMatriz().getLateral().getLetra():
+                    print("insertarAlFinalY")
+                    self.insertarAlFinalY(cabecera.getFinMatriz(), nuevo)
+                    cabecera.setFinMatriz(nuevo)
+                else:
+                    print("insertarAlMedioY")
+                    self.insertarAlMedioY(cabecera.getInicioMatriz(), nuevo)
+
+            # si la cabecera aun no tiene el inicio del Matriz
+            # es porque esta vacio
+            if lateral.getInicioMatriz() is None:
+                print("---lista lateral vacia, creando nodo inicio y fin")
+                lateral.setInicioMatriz(nuevo)
+                lateral.setFinMatriz(nuevo)
+            else:
+                iDominio = lateral.getInicioMatriz().getCabecera().getDominio()
+                fDominio = lateral.getFinMatriz().getCabecera().getDominio()
+                if (dominio < iDominio):
+                    print("insertarAlInicioX")
+                    self.insertarAlInicioX(lateral.getInicioMatriz(), nuevo)
+                    lateral.setInicioMatriz(nuevo)
+                elif (dominio > fDominio):
+                    print("insertarAlFinalX")
+                    self.insertarAlFinalX(lateral.getFinMatriz(), nuevo)
+                    lateral.setFinMatriz(nuevo)
+                else:
+                    print("insertarAlMedioX")
+                    self.insertarAlMedioX(lateral.getInicioMatriz(), nuevo)
+
+            return nuevo
 
     def insertarAlInicioY(self, nodoInicio, nuevo):
         nuevo.setAbajo(nodoInicio)
@@ -105,7 +127,7 @@ class Matriz:
     def bucarCabecera(self, dominio):
         lista = []
         if (self.__listaCabecera.buscar(dominio) is not None):
-            nodo = self.__listaCabecera.buscar(dominio).getNodoInicioMatriz()
+            nodo = self.__listaCabecera.buscar(dominio).getInicioMatriz()
 
             while (nodo is not None):
                 lista.append(nodo.getCorreo())
@@ -116,7 +138,7 @@ class Matriz:
     def obtenerNodo(self, dominio, letra):
         nodoResultante = None
         if (self.__listaCabecera.buscar(dominio) is not None):
-            nodo = self.__listaCabecera.buscar(dominio).getNodoInicioMatriz()
+            nodo = self.__listaCabecera.buscar(dominio).getInicioMatriz()
 
             while (nodo is not None):
                 if (nodo.getLateral().getLetra() == letra):
@@ -129,3 +151,31 @@ class Matriz:
             return nodoResultante
 
         return None
+
+    def buscarPorDominio(self, dominio):
+        lista = []
+        if (self.__listaCabecera.buscar(dominio) is not None):
+            nodo = self.__listaCabecera.buscar(dominio).getInicioMatriz()
+
+            while (nodo is not None):
+                nodoProfundidad = nodo.getProfundidadInicio()
+                while (nodoProfundidad is not None):
+                    lista.append(nodoProfundidad.getCorreo())
+                    nodoProfundidad = nodoProfundidad.getAbajo()
+                nodo = nodo.getAbajo()
+
+        return lista
+
+    def buscarPorLetra(self, letra):
+        lista = []
+        if (self.__listaLateral.buscar(letra) is not None):
+            nodo = self.__listaLateral.buscar(letra).getInicioMatriz()
+
+            while (nodo is not None):
+                nodoProfundidad = nodo.getProfundidadInicio()
+                while (nodoProfundidad is not None):
+                    lista.append(nodoProfundidad.getCorreo())
+                    nodoProfundidad = nodoProfundidad.getAbajo()
+                nodo = nodo.getDerecha()
+
+        return lista

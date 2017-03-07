@@ -41,6 +41,12 @@ def listaEliminar(indice):
         return json.dumps(o)
 
 
+@app.route('/lista/graphviz')
+def listaGraphviz():
+    graphviz = mLista.getGraphvizData()
+    return json.dumps({"graphviz": graphviz, "success": True})
+
+
 @app.route('/cola/queue/<dato>')
 def colaQueue(dato):
     numero = int(dato)
@@ -56,6 +62,12 @@ def colaQueue(dato):
 def colaDequeue():
     x = mCola.desencolar()
     return json.dumps({"numero": x, "success": True})
+
+
+@app.route('/cola/graphviz')
+def colaGraphviz():
+    graphviz = mCola.getGraphvizData()
+    return json.dumps({"graphviz": graphviz, "success": True})
 
 
 @app.route('/pila/push/<dato>')
@@ -75,6 +87,12 @@ def pilaPop():
     return json.dumps({"numero": x, "success": True})
 
 
+@app.route('/pila/graphviz')
+def pilaGraphviz():
+    graphviz = mPila.getGraphvizData()
+    return json.dumps({"graphviz": graphviz, "success": True})
+
+
 @app.route('/matriz/agregar/<dato>')
 def matrizAgregar(dato):
     dato = dato.strip()
@@ -88,16 +106,21 @@ def matrizAgregar(dato):
 @app.route('/matriz/buscarLetra/<letra>')
 def matrizBuscarLetra(letra):
     letra = letra.strip()
-    # mMatriz.insertar(dominio, letra, username)
-    return json.dumps({"success": True})
+    lista = mMatriz.buscarPorLetra(letra)
+    return json.dumps({"success": True, "lista": lista})
 
 
 @app.route('/matriz/buscarDominio/<dominio>')
 def matrizBuscarDominio(dominio):
     dominio = dominio.strip()
-    # mMatriz.insertar(dominio, letra, username)
-    lista = Matriz.bucarCabecera(dominio)
+    lista = mMatriz.buscarPorDominio(dominio)
     return json.dumps({"success": True, "lista": lista})
+
+
+@app.route('/matriz/graphviz')
+def matrizGraphviz():
+    graphviz = mMatriz.getGraphvizData()
+    return json.dumps({"graphviz": graphviz, "success": True})
 
 
 app.run()

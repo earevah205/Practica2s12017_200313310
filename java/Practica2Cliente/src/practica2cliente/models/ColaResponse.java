@@ -20,4 +20,7 @@ public class ColaResponse {
     
     @SerializedName("numero")
     public int numero;
+    
+    @SerializedName("graphviz")
+    public String graphviz;
 }

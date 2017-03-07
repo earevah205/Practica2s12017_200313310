@@ -5,10 +5,13 @@
  */
 package practica2cliente;
 
+import java.io.File;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import practica2cliente.models.ColaResponse;
 import practica2cliente.models.ListaResponse;
 import practica2cliente.rest.PythonApiClient;
+import practica2cliente.utils.GraphViz;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,6 +51,7 @@ public class frmCola extends javax.swing.JFrame {
         btnQueue = new javax.swing.JButton();
         btnDequeue = new javax.swing.JButton();
         txtCola = new javax.swing.JTextField();
+        btnGraphviz = new javax.swing.JButton();
 
         btnQueue.setText("queue");
         btnQueue.addActionListener(new java.awt.event.ActionListener() {
@@ -60,6 +64,13 @@ public class frmCola extends javax.swing.JFrame {
         btnDequeue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDequeueActionPerformed(evt);
+            }
+        });
+
+        btnGraphviz.setText("graphviz");
+        btnGraphviz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGraphvizActionPerformed(evt);
             }
         });
 
@@ -76,6 +87,9 @@ public class frmCola extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDequeue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(49, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnGraphviz))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -86,7 +100,8 @@ public class frmCola extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnQueue)
                     .addComponent(btnDequeue))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnGraphviz))
         );
 
         pack();
@@ -164,10 +179,72 @@ public class frmCola extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnDequeueActionPerformed
 
-    
+    private void btnGraphvizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraphvizActionPerformed
+
+        mPythonClient.getService().colaGraphviz().enqueue(new Callback<ColaResponse>() {
+            @Override
+            public void onResponse(Call<ColaResponse> call, Response<ColaResponse> rspns) {
+                if (rspns.isSuccessful()) {
+                    ColaResponse colaResponse = rspns.body();
+                    
+                    if (colaResponse.success){
+                        
+                        GraphViz gv = new GraphViz();
+                        gv.addln(gv.start_graph());
+
+                        gv.add(colaResponse.graphviz);
+
+                        gv.addln(gv.end_graph());
+
+                        System.out.println(gv.getDotSource());
+                        gv.decreaseDpi();   // 106 dpi
+                        String type = "gif";
+                        String repesentationType= "dot";
+                        String imagePath = gv.getTempDir() + "/lista"+GraphViz.now()+gv.getImageDpi()+"."+ type;
+                        File out = new File( imagePath );
+                        gv.writeGraphToFile( gv.getGraph(gv.getDotSource(), type, repesentationType), out );
+
+                        //creamos el objeto graphviz
+                        //String imagePath = colaDeFichas.crearImagenGraphviz();
+                        System.out.println(imagePath);
+                        mostrarPanelGraphviz(imagePath);
+                        
+                    }else{
+                        JOptionPane.showMessageDialog(null, colaResponse.error, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ocurrió un Error" + "Code: " 
+                            + rspns.code() + "Message: " 
+                            + rspns.message(), "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ColaResponse> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Error en Llamada a python", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
+            
+        });
+        
+    }//GEN-LAST:event_btnGraphvizActionPerformed
+
+    private void mostrarPanelGraphviz(String imagePath){
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frmGraph it = new frmGraph(imagePath);
+        frame.add(it);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDequeue;
+    private javax.swing.JButton btnGraphviz;
     private javax.swing.JButton btnQueue;
     private javax.swing.JTextField txtCola;
     // End of variables declaration//GEN-END:variables

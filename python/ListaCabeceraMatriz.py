@@ -14,11 +14,11 @@ class ListaCabeceraMatriz:
             self.__nodoInicio = self.__nodoFin = nuevo
         else:
             if dominio < self.__nodoInicio.getDominio():
-                self.__insertarAlInicio(nuevo)
-            elif dominio > self.__nodoFin.getdominio():
-                self.__insertarAlFinal(nuevo)
+                self.insertarAlInicio(nuevo)
+            elif dominio > self.__nodoFin.getDominio():
+                self.insertarAlFinal(nuevo)
             else:
-                self.__insertarAlMedio(nuevo)
+                self.insertarAlMedio(nuevo)
         return nuevo
 
     def insertarAlInicio(self, nuevo):

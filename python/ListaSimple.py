@@ -127,14 +127,14 @@ class ListaSimple:
         x = 1
         while nodo is not None:
             if nodo.getSiguiente() is not None:
-                s = "{" + nodo.getDato() + x
+                s = "{" + nodo.getDato() + str(x)
                 s += " [label=\"" + nodo.getDato() + "\"] }"
-                s += " -> {" + nodo.getSiguiente().getDato() + (x+1)
+                s += " -> {" + nodo.getSiguiente().getDato() + str(x+1)
                 s += " [label=\"" + nodo.getSiguiente().getDato() + "\"] }"
                 graphvizData += s
             else:
-                s = "{" + nodo.getDato() + x
-                s += " [label=\"" + nodo.getPalabra().get() + "\"] }"
+                s = "{" + nodo.getDato() + str(x)
+                s += " [label=\"" + nodo.getDato() + "\"] }"
                 graphvizData += s
             x += 1
             nodo = nodo.getSiguiente()

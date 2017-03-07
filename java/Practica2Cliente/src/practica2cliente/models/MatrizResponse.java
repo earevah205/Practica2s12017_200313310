@@ -11,15 +11,15 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author estuardoarevalo
  */
-public class PilaResponse {
+public class MatrizResponse {
     @SerializedName("error")
     public String error;
     
     @SerializedName("success")
     public boolean success;
     
-    @SerializedName("numero")
-    public int numero;
+    @SerializedName("lista")
+    public String[] lista;
     
     @SerializedName("graphviz")
     public String graphviz;

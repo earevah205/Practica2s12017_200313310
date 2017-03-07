@@ -1,10 +1,10 @@
-class NodoLateralMatriz:
+class NodoMatrizProfundidad:
     def __init__(self):
         self.__arriba = None
         self.__abajo = None
-        self.__nodoInicioMatriz = None
-        self.__nodoFinMatriz = None
+        self.__correo = None
         self.__letra = None
+        self.__dominio = None
 
     def getArriba(self):
         return self.__arriba
@@ -18,20 +18,20 @@ class NodoLateralMatriz:
     def setAbajo(self, abajo):
         self.__abajo = abajo
 
+    def getCorreo(self):
+        return self.__correo
+
+    def setCorreo(self, correo):
+        self.__correo = correo
+
     def getLetra(self):
         return self.__letra
 
     def setLetra(self, letra):
         self.__letra = letra
 
-    def getInicioMatriz(self):
-        return self.__nodoInicioMatriz
+    def getDominio(self):
+        return self.__dominio
 
-    def setInicioMatriz(self, nodoInicioMatriz):
-        self.__nodoInicioMatriz = nodoInicioMatriz
-
-    def getFinMatriz(self):
-        return self.__nodoFinMatriz
-
-    def setFinMatriz(self, nodoFinMatriz):
-        self.__nodoFinMatriz = nodoFinMatriz
+    def setDominio(self, dominio):
+        self.__dominio = dominio
